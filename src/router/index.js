@@ -3,6 +3,7 @@ import Router from 'vue-router'
 // @表示的src的绝对路由
 import Home from '@/components/Home'
 import Login from '@/components/Login'
+import Users from '@/components/Users'
 
 Vue.use(Router)
 
@@ -10,7 +11,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/login'
+      redirect: '/home'
     },
     {
       path: '/login',
@@ -18,7 +19,13 @@ const router = new Router({
     },
     {
       path: '/home',
-      component: Home
+      component: Home,
+      children: [
+        {
+          path: '/users',
+          component: Users
+        }
+      ]
     }
   ]
 })

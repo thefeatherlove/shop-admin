@@ -1,23 +1,29 @@
 <template>
   <div class="login">
     <el-form :model="form" :rules="rules" ref="form" label-width="80px" class="demo-form">
-    <img src="../assets/avatar.jpg" alt="">
-    <el-form-item label="用户名" prop="username">
-      <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
-    </el-form-item>
-    <el-form-item label="密码" prop="password">
-    <el-input type="password" v-model="form.password" autocomplete="off" placeholder="请输入密码"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="submit">登录</el-button>
-      <el-button @click="reset">重置</el-button>
-    </el-form-item>
-  </el-form>
+      <img src="../assets/avatar.jpg" alt>
+      <el-form-item label="用户名" prop="username">
+        <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
+      </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input
+          type="password"
+          @keyup.enter.native="submit"
+          v-model="form.password"
+          autocomplete="off"
+          placeholder="请输入密码"
+        ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submit">登录</el-button>
+        <el-button @click="reset">重置</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 // console.log(axios)
 export default {
   data() {
@@ -43,12 +49,12 @@ export default {
       this.$refs.form.validate(async valid => {
         if (!valid) return false
         // 发送ajax请求
-        axios({
-          url: 'http://localhost:8888/api/private/v1/login',
+        this.axios({
+          url: 'login',
           method: 'post',
           data: this.form
         }).then(res => {
-          if (res.data.meta.status === 200) {
+          if (res.meta.status === 200) {
             // 使用提示信息
             this.$message({
               message: '登录成功了',
@@ -56,12 +62,12 @@ export default {
               duration: 1000
             })
             // 先将token存储起来
-            localStorage.setItem('token', res.data.data.token)
+            localStorage.setItem('token', res.data.token)
             // 登录成功跳转到首页组件
             this.$router.push('/home')
           } else {
             this.$message({
-              message: res.data.meta.msg,
+              message: res.meta.msg,
               type: 'error',
               duration: 1000
             })
@@ -77,28 +83,28 @@ export default {
 </script>
 
 <style lang='less' scoped>
-  .login{
-    height: 100%;
-    background-color: #2d434c;
-    overflow: hidden;
-    .el-form{
-      width: 400px;
-      margin: 200px auto;
-      background-color: #fff;
-      padding: 75px 40px 15px;
-      border-radius: 20px;
-      position: relative;
-      img {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        top: -80px;
-        border-radius: 50%;
-        border: 10px solid #fff;
-      }
-      .el-button + .el-button {
-        margin-left: 70px;
-      }
+.login {
+  height: 100%;
+  background-color: #2d434c;
+  overflow: hidden;
+  .el-form {
+    width: 400px;
+    margin: 200px auto;
+    background-color: #fff;
+    padding: 75px 40px 15px;
+    border-radius: 20px;
+    position: relative;
+    img {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: -80px;
+      border-radius: 50%;
+      border: 10px solid #fff;
+    }
+    .el-button + .el-button {
+      margin-left: 70px;
     }
   }
+}
 </style>
